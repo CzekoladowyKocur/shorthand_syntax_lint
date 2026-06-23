@@ -21,5 +21,5 @@ jobs:
       - run: dart pub get
       - run: dart format --output=none --set-exit-if-changed .
         if: ${{ matrix.sdk == 'stable' }}
-      - run: dart analyze --fatal-infos
+      - run: dart analyze --fatal-infos lib test
       - run: dart test

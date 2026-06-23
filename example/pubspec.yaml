@@ -1,0 +1,9 @@
+name: example
+publish_to: none
+
+environment:
+  sdk: ^3.11.0
+
+dev_dependencies:
+  shorthand_syntax_lint:
+    path: ../

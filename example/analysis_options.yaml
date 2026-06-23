@@ -1,0 +1,3 @@
+plugins:
+  shorthand_syntax_lint:
+    path: ../
