@@ -5,8 +5,10 @@ import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/error/error.dart';
+
+import '../context_type.dart';
+import '../longhand.dart';
 
 class PreferEnumShorthands extends AnalysisRule {
   static const LintCode code = LintCode(
@@ -32,6 +34,7 @@ class PreferEnumShorthands extends AnalysisRule {
     if (!context.isFeatureEnabled(Feature.dot_shorthands)) return;
     var visitor = _Visitor(this);
     registry.addPrefixedIdentifier(this, visitor);
+    registry.addPropertyAccess(this, visitor);
   }
 }
 
@@ -42,32 +45,23 @@ class _Visitor extends SimpleAstVisitor<void> {
 
   @override
   void visitPrefixedIdentifier(PrefixedIdentifier node) {
-    var enumElement = node.prefix.element;
-    if (enumElement is! EnumElement) return;
-    var constant = _enumConstant(node.identifier.element);
-    if (constant == null || constant.enclosingElement != enumElement) return;
-    var declaration = node.parent;
-    if (declaration is! VariableDeclaration ||
-        declaration.initializer != node) {
-      return;
-    }
-    var declarationList = declaration.parent;
-    if (declarationList is! VariableDeclarationList) return;
-    var declaredType = declarationList.type?.type;
-    if (declaredType is! InterfaceType || declaredType.element != enumElement) {
-      return;
-    }
-    rule.reportAtNode(
-      node,
-      arguments: [node.identifier.name, node.prefix.name],
-    );
+    _check(node);
   }
 
-  FieldElement? _enumConstant(Element? element) {
-    var variable = element is PropertyAccessorElement
-        ? element.variable
-        : element;
-    if (variable is FieldElement && variable.isEnumConstant) return variable;
-    return null;
+  @override
+  void visitPropertyAccess(PropertyAccess node) {
+    _check(node);
+  }
+
+  void _check(Expression node) {
+    var longhand = matchLonghand(node);
+    if (longhand == null || longhand.kind != LonghandKind.enumConstant) return;
+    var target = longhand.target;
+    if (target is! EnumElement) return;
+    if (!identical(shorthandContextElement(node), target)) return;
+    rule.reportAtNode(
+      node,
+      arguments: [longhand.memberName, target.displayName],
+    );
   }
 }
