@@ -9,11 +9,16 @@ void main() {
     expect(plugin.name, 'shorthand_syntax_lint');
   });
 
-  test('register registers prefer_enum_shorthands as a warning rule', () {
+  test('register registers the kind rules as warning rules', () {
     var registry = _RecordingRegistry();
     plugin.register(registry);
-    expect(registry.warningRules, hasLength(1));
-    expect(registry.warningRules.single.name, 'prefer_enum_shorthands');
+    expect(
+      registry.warningRules.map((rule) => rule.name),
+      unorderedEquals([
+        'prefer_enum_shorthands',
+        'prefer_static_member_shorthands',
+      ]),
+    );
     expect(registry.lintRules, isEmpty);
   });
 }
