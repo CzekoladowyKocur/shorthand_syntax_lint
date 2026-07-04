@@ -17,6 +17,7 @@ void main() {
       unorderedEquals([
         'prefer_enum_shorthands',
         'prefer_static_member_shorthands',
+        'prefer_constructor_shorthands',
       ]),
     );
     expect(registry.lintRules, isEmpty);
