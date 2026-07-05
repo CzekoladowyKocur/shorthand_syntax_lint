@@ -4,6 +4,7 @@ import 'package:analysis_server_plugin/registry.dart';
 import 'rules/prefer_constructor_shorthands.dart';
 import 'rules/prefer_enum_shorthands.dart';
 import 'rules/prefer_static_member_shorthands.dart';
+import 'rules/prefer_unnamed_constructor_shorthands.dart';
 
 class ShorthandSyntaxLintPlugin extends Plugin {
   @override
@@ -14,5 +15,6 @@ class ShorthandSyntaxLintPlugin extends Plugin {
     registry.registerWarningRule(PreferEnumShorthands());
     registry.registerWarningRule(PreferStaticMemberShorthands());
     registry.registerWarningRule(PreferConstructorShorthands());
+    registry.registerLintRule(PreferUnnamedConstructorShorthands());
   }
 }

@@ -20,7 +20,15 @@ void main() {
         'prefer_constructor_shorthands',
       ]),
     );
-    expect(registry.lintRules, isEmpty);
+  });
+
+  test('register registers the opt-in rules as lint rules', () {
+    var registry = _RecordingRegistry();
+    plugin.register(registry);
+    expect(
+      registry.lintRules.map((rule) => rule.name),
+      unorderedEquals(['prefer_unnamed_constructor_shorthands']),
+    );
   });
 }
 
