@@ -27,7 +27,10 @@ void main() {
     plugin.register(registry);
     expect(
       registry.lintRules.map((rule) => rule.name),
-      unorderedEquals(['prefer_unnamed_constructor_shorthands']),
+      unorderedEquals([
+        'prefer_unnamed_constructor_shorthands',
+        'prefer_return_shorthands',
+      ]),
     );
   });
 }
