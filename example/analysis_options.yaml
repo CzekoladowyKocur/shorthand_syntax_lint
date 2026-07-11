@@ -1,3 +1,6 @@
 plugins:
   shorthand_syntax_lint:
     path: ../
+    diagnostics:
+      prefer_return_shorthands: true
+      prefer_unnamed_constructor_shorthands: true
