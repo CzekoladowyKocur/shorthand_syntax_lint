@@ -3,6 +3,7 @@ description: >-
   Analyzer plugin with granular lint rules and quick fixes for Dart's
   dot-shorthand syntax.
 version: 0.1.0
+topics: [lints, analysis, analyzer-plugin]
 
 environment:
   sdk: ^3.11.0
