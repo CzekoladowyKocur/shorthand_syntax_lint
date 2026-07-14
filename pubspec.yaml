@@ -3,6 +3,8 @@ description: >-
   Analyzer plugin with granular lint rules and quick fixes for Dart's
   dot-shorthand syntax.
 version: 0.1.0
+repository: https://github.com/CzekoladowyKocur/shorthand_syntax_lint
+issue_tracker: https://github.com/CzekoladowyKocur/shorthand_syntax_lint/issues
 topics: [lints, analysis, analyzer-plugin]
 
 environment:
