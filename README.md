@@ -57,8 +57,7 @@ Diagnostics are suppressed with a namespaced ignore comment:
 
 ## Version compatibility
 
-Requires Dart SDK 3.11 or later. The package intentionally caps
-`analysis_server_plugin` below 0.3.16: newer framework versions cannot
-receive analysis roots from current stable SDKs' analysis server, which makes
-`dart analyze` hang. The cap will be lifted when a stable SDK ships the
-updated server protocol.
+Requires Dart SDK 3.11 or later. The package requires
+`analysis_server_plugin` 0.3.20 or later: versions 0.3.16 through 0.3.19
+cannot receive analysis roots from stable SDKs' analysis server, which makes
+`dart analyze` hang.

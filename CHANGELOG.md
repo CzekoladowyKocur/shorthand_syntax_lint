@@ -6,5 +6,5 @@
 - Adds the opt-in `prefer_unnamed_constructor_shorthands` and
   `prefer_return_shorthands`.
 - Adds quick fixes converting longhand to shorthand, available in IDEs.
-- Caps `analysis_server_plugin` below 0.3.16 until a stable SDK ships the
-  updated analysis server protocol.
+- Requires `analysis_server_plugin` 0.3.20 or later; versions 0.3.16 through
+  0.3.19 hang `dart analyze` on stable SDKs.
