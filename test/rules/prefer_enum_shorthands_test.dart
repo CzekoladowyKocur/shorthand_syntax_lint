@@ -464,6 +464,22 @@ Status f() {
     );
   }
 
+  Future<void> test_selectorReceiver() async {
+    await assertDiagnostics(
+      r'''
+enum Status {
+  active,
+  inactive;
+
+  Status flip() => this;
+}
+
+Status s = Status.active.flip();
+''',
+      [lint(76, 13)],
+    );
+  }
+
   Future<void> test_selectorReceiver_noLint() async {
     await assertNoDiagnostics(r'''
 enum Status { active, inactive }

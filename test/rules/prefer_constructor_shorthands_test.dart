@@ -786,6 +786,23 @@ P f() {
     );
   }
 
+  Future<void> test_selectorReceiver() async {
+    await assertDiagnostics(
+      r'''
+class P {
+  final int x;
+
+  const P.origin() : x = 0;
+
+  P shift() => this;
+}
+
+P p = P.origin().shift();
+''',
+      [lint(85, 10)],
+    );
+  }
+
   Future<void> test_selectorReceiver_noLint() async {
     await assertNoDiagnostics(r'''
 class P {

@@ -504,7 +504,16 @@ Duration f() {
     );
   }
 
-  Future<void> test_selectorReceiverProperty_noLint() async {
+  Future<void> test_selectorReceiver() async {
+    await assertDiagnostics(
+      r'''
+int x = int.parse('42').abs();
+''',
+      [lint(8, 15)],
+    );
+  }
+
+  Future<void> test_selectorReceiverContextMismatch_noLint() async {
     await assertNoDiagnostics(r'''
 class Span {
   static const Span zero = Span._(0);
@@ -518,10 +527,30 @@ int x = Span.zero.length;
 ''');
   }
 
-  Future<void> test_selectorReceiver_noLint() async {
-    await assertNoDiagnostics(r'''
-int x = int.parse('42').abs();
-''');
+  Future<void> test_selectorReceiverEquality() async {
+    await assertDiagnostics(
+      r'''
+void f(int x) {
+  if (x == int.parse('1').abs()) {}
+}
+''',
+      [lint(27, 14)],
+    );
+  }
+
+  Future<void> test_selectorReceiverNullAssert() async {
+    await assertDiagnostics(
+      r'''
+class Box {
+  static Box? find() => null;
+
+  Box twin() => this;
+}
+
+Box b = Box.find()!.twin();
+''',
+      [lint(76, 10)],
+    );
   }
 
   Future<void> test_shadowedClass_noLint() async {

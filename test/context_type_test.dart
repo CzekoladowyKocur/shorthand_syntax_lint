@@ -665,6 +665,22 @@ int x = int.tryParse('1')!;
     );
   }
 
+  Future<void> test_nullAssertEquality() async {
+    await resolveSnippet(r'''
+class Box {
+  static Box? find() => null;
+}
+
+void f(Box b) {
+  if (b == Box.find()!) {}
+}
+''');
+    expect(
+      shorthandContextElement(expression('Box.find()')),
+      same(declaration('Box')),
+    );
+  }
+
   Future<void> test_objectContext() async {
     await resolveSnippet(r'''
 Object o = Object.hash(1, 2);
@@ -861,6 +877,85 @@ Status f() {
   Future<void> test_selectorChainHead() async {
     await resolveSnippet(r'''
 String s = int.parse('1').toString();
+''');
+    expect(
+      shorthandContextElement(expression("int.parse('1')")),
+      same(snippet.typeProvider.stringElement),
+    );
+  }
+
+  Future<void> test_selectorChainHeadEquality() async {
+    await resolveSnippet(r'''
+void f(int x) {
+  if (x == int.parse('1').abs()) {}
+}
+''');
+    expect(
+      shorthandContextElement(expression("int.parse('1')")),
+      same(snippet.typeProvider.intElement),
+    );
+  }
+
+  Future<void> test_selectorChainHeadIndex() async {
+    await resolveSnippet(r'''
+class Row {
+  static final Row empty = Row._();
+
+  Row._();
+
+  int operator [](int i) => i;
+}
+
+int x = Row.empty[0];
+''');
+    expect(
+      shorthandContextElement(expression('Row.empty')),
+      same(snippet.typeProvider.intElement),
+    );
+  }
+
+  Future<void> test_selectorChainHeadNullAssert() async {
+    await resolveSnippet(r'''
+class Box {
+  static Box? find() => null;
+
+  Box twin() => this;
+}
+
+void f() {
+  Box b = Box.find()!.twin();
+  b.toString();
+}
+''');
+    expect(
+      shorthandContextElement(expression('Box.find()')),
+      same(declaration('Box')),
+    );
+  }
+
+  Future<void> test_selectorChainHeadProperty() async {
+    await resolveSnippet(r'''
+class Box {
+  static const Box unit = Box._();
+
+  const Box._();
+
+  int get size => 0;
+}
+
+int x = Box.unit.size;
+''');
+    expect(
+      shorthandContextElement(expression('Box.unit')),
+      same(snippet.typeProvider.intElement),
+    );
+  }
+
+  Future<void> test_selectorChainHeadStatement() async {
+    await resolveSnippet(r'''
+void f() {
+  int.parse('1').abs();
+}
 ''');
     expect(shorthandContextElement(expression("int.parse('1')")), isNull);
   }

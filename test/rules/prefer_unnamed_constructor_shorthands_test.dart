@@ -380,6 +380,23 @@ P f() {
     );
   }
 
+  Future<void> test_selectorReceiver() async {
+    await assertDiagnostics(
+      r'''
+class Pt {
+  final int x;
+
+  const Pt(this.x);
+
+  Pt shift() => this;
+}
+
+Pt p = Pt(1).shift();
+''',
+      [lint(80, 5)],
+    );
+  }
+
   Future<void> test_staticMethod_noLint() async {
     await assertNoDiagnostics(r'''
 int x = int.parse('42');

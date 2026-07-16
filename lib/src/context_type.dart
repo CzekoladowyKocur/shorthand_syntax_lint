@@ -104,10 +104,22 @@ DartType? _contextType(Expression node, {required bool precise}) {
     return _contextType(parent as Expression, precise: false);
   }
   if (parent is PostfixExpression && parent.operator.type == TokenType.BANG) {
-    return _contextType(parent, precise: false);
+    return _contextType(parent, precise: precise);
   }
   if (parent is CascadeExpression && parent.target == node) {
     return _contextType(parent, precise: false);
+  }
+  if (parent is MethodInvocation && parent.target == node) {
+    if (node is ParenthesizedExpression) return null;
+    return _contextType(parent, precise: precise);
+  }
+  if (parent is PropertyAccess && parent.target == node) {
+    if (node is ParenthesizedExpression) return null;
+    return _contextType(parent, precise: precise);
+  }
+  if (parent is IndexExpression && parent.target == node) {
+    if (node is ParenthesizedExpression) return null;
+    return _contextType(parent, precise: precise);
   }
   if (parent is ListLiteral || parent is SetOrMapLiteral) {
     return _collectionElementType(node, 0);

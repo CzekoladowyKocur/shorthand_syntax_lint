@@ -343,6 +343,34 @@ Status f() {
     );
   }
 
+  Future<void> test_selectorChain() async {
+    await assertHasEdit(
+      r'''
+class Box {
+  static const Box unit = Box._();
+
+  const Box._();
+
+  Box twin() => this;
+}
+
+Box b = Box.unit.twin();
+''',
+      'Box.unit',
+      r'''
+class Box {
+  static const Box unit = Box._();
+
+  const Box._();
+
+  Box twin() => this;
+}
+
+Box b = .unit.twin();
+''',
+    );
+  }
+
   Future<void> test_siblingClassStatic_noEdit() async {
     await assertNoEdit(r'''
 class C {

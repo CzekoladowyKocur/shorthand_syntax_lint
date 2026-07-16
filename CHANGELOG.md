@@ -1,3 +1,8 @@
+## 0.2.0
+
+- Flag longhand heads of selector chains (`int.parse(s).abs()`), including
+  in equality and null-assert positions.
+
 ## 0.1.0
 
 - Initial release.

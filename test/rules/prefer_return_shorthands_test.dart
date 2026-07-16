@@ -58,6 +58,23 @@ P f() => P.origin();
     );
   }
 
+  Future<void> test_arrowBody_selectorChain() async {
+    await assertDiagnostics(
+      r'''
+class Box {
+  static const Box unit = Box._();
+
+  const Box._();
+
+  Box twin() => this;
+}
+
+Box f() => Box.unit.twin();
+''',
+      [lint(102, 8)],
+    );
+  }
+
   Future<void> test_arrowBody_staticField() async {
     await assertDiagnostics(
       r'''

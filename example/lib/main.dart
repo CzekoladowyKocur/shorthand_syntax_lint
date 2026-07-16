@@ -16,6 +16,7 @@ void main() {
   Duration delay = Duration.zero;
   Point origin = Point.origin();
   Point point = Point(2, 3);
+
   print(status);
   print(delay);
   print(origin.x + point.y);

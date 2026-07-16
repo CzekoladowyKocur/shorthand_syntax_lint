@@ -3,6 +3,7 @@ import 'package:analyzer/analysis_rule/rule_context.dart';
 import 'package:analyzer/analysis_rule/rule_visitor_registry.dart';
 import 'package:analyzer/dart/analysis/features.dart';
 import 'package:analyzer/dart/ast/ast.dart';
+import 'package:analyzer/dart/ast/token.dart';
 import 'package:analyzer/dart/ast/visitor.dart';
 import 'package:analyzer/error/error.dart';
 
@@ -55,13 +56,30 @@ class _Visitor extends SimpleAstVisitor<void> {
   }
 
   void _check(Expression node) {
-    var longhand = matchLonghand(node);
-    if (longhand == null) return;
-    var target = longhand.target;
-    if (!identical(shorthandContextElement(node), target)) return;
-    rule.reportAtNode(
-      node,
-      arguments: [longhand.memberName, target.displayName],
-    );
+    while (true) {
+      var longhand = matchLonghand(node);
+      if (longhand != null) {
+        var target = longhand.target;
+        if (!identical(shorthandContextElement(node), target)) return;
+        rule.reportAtNode(
+          node,
+          arguments: [longhand.memberName, target.displayName],
+        );
+        return;
+      }
+      var receiver = _receiver(node);
+      if (receiver == null) return;
+      node = receiver;
+    }
+  }
+
+  Expression? _receiver(Expression node) {
+    if (node is MethodInvocation) return node.target;
+    if (node is PropertyAccess) return node.target;
+    if (node is IndexExpression) return node.target;
+    if (node is PostfixExpression && node.operator.type == TokenType.BANG) {
+      return node.operand;
+    }
+    return null;
   }
 }

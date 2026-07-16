@@ -49,9 +49,9 @@ Diagnostics are suppressed with a namespaced ignore comment:
 
 - Quick fixes work in IDEs, but `dart fix` does not run plugin-provided fixes
   ([dart-lang/sdk#61822](https://github.com/dart-lang/sdk/issues/61822)).
-- Longhand followed by trailing selectors (`int.parse(s).abs()`) is not
-  flagged, and neither is the supertype redirecting-factory pattern
-  (`EdgeInsetsGeometry.all`). Both are deliberate false negatives.
+- The supertype redirecting-factory pattern (`EdgeInsetsGeometry.all`)
+  is not flagged; the shorthand would resolve to a different declaration.
+  This is a deliberate false negative.
 - Analyzer plugins are only honored in the analysis options file at the
   workspace root.
 
